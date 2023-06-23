@@ -13,7 +13,9 @@ export default async (req, res, next) => {
   const [, token] = authorization.split(' ');
 
   try {
+    // extrair id e email do payload do token.
     const dados = jwt.verify(token, process.env.TOKEN_SECRET);
+
     const { id, email } = dados;
 
     const user = await User.findOne({
@@ -31,6 +33,7 @@ export default async (req, res, next) => {
 
     req.userId = id;
     req.userEmail = email;
+
     return next();
   } catch (e) {
     return res.status(401).json({
